@@ -3,12 +3,12 @@ import AdminLayout from '../../components/layout/AdminLayout';
 
 interface Props {}
 
-const Admin: NextPage<Props> = () => {
+const Posts: NextPage<Props> = () => {
   return (
     <AdminLayout>
-      <div>admin</div>
+      <div>posts</div>
     </AdminLayout>
   );
 };
 
-export default Admin;
+export default Posts;
