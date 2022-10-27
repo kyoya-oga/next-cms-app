@@ -1,0 +1,39 @@
+import { FC, ReactNode, useState } from 'react';
+
+interface Props {
+  options: { label: string; onClick(): void }[];
+  head: ReactNode;
+}
+
+const DropdownOptions: FC<Props> = ({ head, options }): JSX.Element => {
+  const [showOptions, setShowOptions] = useState(false);
+
+  return (
+    <button
+      onBlur={() => setShowOptions(false)}
+      onMouseDown={() => setShowOptions(!showOptions)}
+      className="relative"
+    >
+      {head}
+      {showOptions ? (
+        <div className="min-w-max absolute top-full mt-4 right-2 z-10 border-2 border-primary-dark dark:border-primary rounded text-left bg-primary dark:bg-primary-dark">
+          <ul className="p-3 space-y-3">
+            {options.map(({ label, onClick }, index) => {
+              return (
+                <li
+                  key={label + index}
+                  onMouseDown={onClick}
+                  className="hover:opacity-80"
+                >
+                  {label}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+    </button>
+  );
+};
+
+export default DropdownOptions;

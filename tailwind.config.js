@@ -23,7 +23,10 @@ module.exports = {
       transitionProperty: {
         width: 'width',
       },
+      backgroundImage: {
+        'png-pattern': "url('/empty-bg.jpg')",
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography'), require('tailwind-scrollbar')],
 };
