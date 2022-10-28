@@ -5,6 +5,7 @@ import Underline from '@tiptap/extension-underline';
 import Youtube from '@tiptap/extension-youtube';
 import { EditorContent, getMarkRange, Range, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import GalleryModal, { ImageSelectionResults } from './GalleryModal';
 import EditLink from './link/EditLink';
@@ -15,6 +16,13 @@ interface Props {}
 const Editor: FC<Props> = (props): JSX.Element => {
   const [selectionRange, setSelectionRange] = useState<Range>();
   const [showGallery, setShowGallery] = useState<boolean>(false);
+  const [images, setImages] = useState<{ src: string }[]>([]);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const fetchImages = async () => {
+    const { data } = await axios('/api/image');
+    setImages(data.images);
+  };
 
   const editor = useEditor({
     extensions: [
@@ -68,8 +76,19 @@ const Editor: FC<Props> = (props): JSX.Element => {
       .run();
   };
 
-  // todo
-  const handleImageUpload = (file: File) => {};
+  const handleImageUpload = async (file: File) => {
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    const { data } = await axios.post('/api/image', formData);
+    setUploading(false);
+
+    setImages([data, ...images]);
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   useEffect(() => {
     if (editor && selectionRange) {
@@ -90,10 +109,12 @@ const Editor: FC<Props> = (props): JSX.Element => {
       </div>
 
       <GalleryModal
+        images={images}
         visible={showGallery}
         onClose={() => setShowGallery(false)}
         onSelect={handleImageSelection}
         onFileSelect={handleImageUpload}
+        uploading={uploading}
       />
     </>
   );

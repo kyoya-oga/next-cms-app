@@ -52,7 +52,7 @@ const uploadNewImage: NextApiHandler = async (req, res) => {
           folder: 'next-cms',
         }
       );
-      res.json({ image: secure_url });
+      res.json({ src: secure_url });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
