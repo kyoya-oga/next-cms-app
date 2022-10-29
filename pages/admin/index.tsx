@@ -5,7 +5,7 @@ interface Props {}
 
 const Admin: NextPage<Props> = () => {
   return (
-    <AdminLayout>
+    <AdminLayout title="Admin">
       <div>admin</div>
     </AdminLayout>
   );

@@ -1,6 +1,20 @@
-import { model, models, Schema } from 'mongoose';
+import { Model, model, models, ObjectId, Schema } from 'mongoose';
 
-const PostSchema = new Schema(
+interface PostModelSchema {
+  title: string;
+  content: string;
+  slug: string;
+  meta: string;
+  tags: string[];
+  thumbnail: {
+    url: string;
+    public_id: string;
+  };
+  createdAt: Date;
+  author: ObjectId;
+}
+
+const PostSchema = new Schema<PostModelSchema>(
   {
     title: {
       type: String,
@@ -31,7 +45,7 @@ const PostSchema = new Schema(
       required: true,
       trim: true,
     },
-    auther: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
@@ -44,4 +58,4 @@ const PostSchema = new Schema(
 // configure for Next.js
 const Post = models?.Post || model('Post', PostSchema);
 
-export default Post;
+export default Post as Model<PostModelSchema>;
