@@ -1,12 +1,14 @@
 import formidable from 'formidable';
 import { NextApiRequest } from 'next';
 
-interface FormidablePromise {
+interface FormidablePromise<T> {
   files: formidable.Files;
-  body: formidable.Fields;
+  body: T;
 }
 
-export const readFile = (req: NextApiRequest): Promise<FormidablePromise> => {
+export const readFile = <T extends object>(
+  req: NextApiRequest
+): Promise<FormidablePromise<T>> => {
   const form = formidable();
 
   return new Promise((resolve, reject) => {
@@ -15,7 +17,7 @@ export const readFile = (req: NextApiRequest): Promise<FormidablePromise> => {
 
       console.log(fields);
 
-      resolve({ files, body: fields });
+      resolve({ files, body: fields as T });
     });
   });
 };

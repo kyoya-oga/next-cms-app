@@ -15,6 +15,7 @@ import ThumbnailSelector from './ThumbnailSelector';
 import ToolBar from './ToolBar';
 
 export interface FinalPost extends SeoResult {
+  id?: string;
   title: string;
   content: string;
   thumbnail?: File | string;
