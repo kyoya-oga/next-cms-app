@@ -4,6 +4,7 @@ import cloudinary from '../../../lib/cloudinary';
 import { readFile } from '../../../lib/utils';
 import { postValidationSchema, validateSchema } from '../../../lib/validator';
 import Post from '../../../models/Post';
+import { IncomingPost } from '../../../utils/types';
 
 export const config = {
   api: { bodyParser: false },
@@ -19,14 +20,6 @@ const handler: NextApiHandler = (req, res) => {
       return res.status(404).send(`Not found`);
   }
 };
-
-interface IncomingPost {
-  title: string;
-  content: string;
-  slug: string;
-  meta: string;
-  tags: string;
-}
 
 const updatePost: NextApiHandler = async (req, res) => {
   const postId = req.query.postId as string;
