@@ -1,7 +1,9 @@
+import Tippy from '@tippyjs/react';
 import Link from 'next/link';
 import { FC, useEffect, useRef, useState } from 'react';
 import { IconType } from 'react-icons';
 import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri';
+import 'tippy.js/dist/tippy.css';
 
 import Logo from '../Logo';
 
@@ -70,17 +72,22 @@ const AdminNav: FC<Props> = ({ navItems }): JSX.Element => {
           </a>
         </Link>
 
+        {/* Nav Items */}
         <div className="space-y-6">
           {navItems.map((item) => {
             return (
-              <Link key={item.href} href={item.href}>
-                <a className="flex items-center text-xl dark:text-highlight-dark text-highlight-light p-3 hover:scale-[0.98] transition-transform">
-                  <item.icon size={24} />
-                  {visible ? (
-                    <span className="ml-2 leading-none">{item.label}</span>
-                  ) : null}
-                </a>
-              </Link>
+              <Tippy key={item.href} content={item.label}>
+                <div>
+                  <Link href={item.href}>
+                    <a className="flex items-center text-xl dark:text-highlight-dark text-highlight-light p-3 hover:scale-[0.98] transition-transform">
+                      <item.icon size={24} />
+                      {visible ? (
+                        <span className="ml-2 leading-none">{item.label}</span>
+                      ) : null}
+                    </a>
+                  </Link>
+                </div>
+              </Tippy>
             );
           })}
         </div>

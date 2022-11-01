@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { HiLightBulb } from 'react-icons/hi';
+import useDarkMode from '../../../hooks/useDarkMode';
 import { UserProfile } from '../../../utils/types';
 import { GithubAuthButton } from '../../button';
 import { APP_NAME } from '../AppHead';
@@ -23,6 +24,8 @@ const defaultOptions: DropDownOptions = [
 
 const UserNav: FC<Props> = (props): JSX.Element => {
   const { data, status } = useSession();
+
+  const { toggleTheme } = useDarkMode();
 
   const isAuth = status === 'authenticated';
   const router = useRouter();
@@ -55,7 +58,10 @@ const UserNav: FC<Props> = (props): JSX.Element => {
       </Link>
 
       <div className="flex items-center space-x-5">
-        <button className="dark:text-secondary-dark text-secondary-light">
+        <button
+          onClick={toggleTheme}
+          className="dark:text-secondary-dark text-secondary-light"
+        >
           <HiLightBulb size={34} />
         </button>
 
