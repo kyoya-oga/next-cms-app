@@ -1,6 +1,9 @@
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { HiLightBulb } from 'react-icons/hi';
+import { UserProfile } from '../../../utils/types';
 import { GithubAuthButton } from '../../button';
 import { APP_NAME } from '../AppHead';
 import DropdownOptions, { DropDownOptions } from '../DropdownOptions';
@@ -9,17 +12,39 @@ import ProfileHead from '../ProfileHead';
 
 interface Props {}
 
+const defaultOptions: DropDownOptions = [
+  {
+    label: 'Logout',
+    async onClick() {
+      await signOut();
+    },
+  },
+];
+
 const UserNav: FC<Props> = (props): JSX.Element => {
-  const dropdownOptions: DropDownOptions = [
-    {
-      label: 'Dashboard',
-      onClick: () => {},
-    },
-    {
-      label: 'Logout',
-      onClick: () => {},
-    },
-  ];
+  const { data, status } = useSession();
+
+  const isAuth = status === 'authenticated';
+  const router = useRouter();
+  const profile = data?.user as UserProfile | undefined;
+  const isAdmin = profile && profile.role === 'admin';
+
+  const handleLoginWithGithub = async () => {
+    const res = await signIn('github');
+  };
+
+  const dropdownOptions: DropDownOptions = isAdmin
+    ? [
+        {
+          label: 'Dashboard',
+          onClick() {
+            router.push('/admin');
+          },
+        },
+        ...defaultOptions,
+      ]
+    : defaultOptions;
+
   return (
     <div className="flex items-center justify-between bg-primary-dark p-3 ">
       <Link href="/">
@@ -33,12 +58,15 @@ const UserNav: FC<Props> = (props): JSX.Element => {
         <button className="dark:text-secondary-dark text-secondary-light">
           <HiLightBulb size={34} />
         </button>
-        <GithubAuthButton onClick={() => {}} lightOnly />
 
-        {/* <DropdownOptions
-          options={dropdownOptions}
-          head={<ProfileHead nameInitial="B" lightOnly />}
-        /> */}
+        {isAuth ? (
+          <DropdownOptions
+            options={dropdownOptions}
+            head={<ProfileHead nameInitial="B" lightOnly />}
+          />
+        ) : (
+          <GithubAuthButton onClick={handleLoginWithGithub} lightOnly />
+        )}
       </div>
     </div>
   );

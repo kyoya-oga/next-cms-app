@@ -20,7 +20,7 @@ export const GithubAuthButton: FC<Props> = ({
       : 'bg-primary-dark dark:bg-primary text-primary dark:text-primary-dark';
   }, [lightOnly]);
   return (
-    <button className={classNames(commonClasses, getStyle())}>
+    <button onClick={onClick} className={classNames(commonClasses, getStyle())}>
       <span>Continue with</span>
       <AiFillGithub size={24} />
     </button>
