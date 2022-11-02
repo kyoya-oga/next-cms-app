@@ -26,6 +26,7 @@ const Gallery: FC<Props> = ({
       {images.map(({ src }, index) => (
         <div key={index} className="basis-1/4 p-1 aspect-square">
           <Image
+            alt="gallery"
             src={src}
             selected={selectedImage === src}
             onClick={() => onSelect(src)}

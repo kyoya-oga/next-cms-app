@@ -1,6 +1,7 @@
 import formidable from 'formidable';
 import { NextApiHandler } from 'next';
 import cloudinary from '../../lib/cloudinary';
+import { isAdmin } from '../../lib/utils';
 
 export const config = {
   api: { bodyParser: false },
@@ -21,6 +22,9 @@ const handler: NextApiHandler = async (req, res) => {
 
 const readAllImages: NextApiHandler = async (req, res) => {
   try {
+    const admin = await isAdmin(req, res);
+    if (!admin) return res.status(401).json({ error: 'Unauthorized' });
+
     const { resources } = await cloudinary.api.resources({
       resource_type: 'image',
       type: 'upload',
@@ -38,14 +42,14 @@ const readAllImages: NextApiHandler = async (req, res) => {
   }
 };
 const uploadNewImage: NextApiHandler = async (req, res) => {
-  const form = formidable();
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    const imageFile = files.image as formidable.File;
+  try {
+    const admin = await isAdmin(req, res);
+    if (!admin) return res.status(401).json({ error: 'Unauthorized' });
 
-    try {
+    const form = formidable();
+    form.parse(req, async (err, fields, files) => {
+      const imageFile = files.image as formidable.File;
+
       const { secure_url } = await cloudinary.uploader.upload(
         imageFile.filepath,
         {
@@ -53,10 +57,10 @@ const uploadNewImage: NextApiHandler = async (req, res) => {
         }
       );
       res.json({ src: secure_url });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 export default handler;

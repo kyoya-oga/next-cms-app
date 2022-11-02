@@ -1,7 +1,9 @@
 import formidable from 'formidable';
-import { NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { unstable_getServerSession } from 'next-auth';
 import Post, { PostModelSchema } from '../models/Post';
-import { PostDetail } from '../utils/types';
+import { authOptions } from '../pages/api/auth/[...nextauth]';
+import { PostDetail, UserProfile } from '../utils/types';
 import dbConnect from './dbConnect';
 
 interface FormidablePromise<T> {
@@ -54,4 +56,11 @@ export const formatPosts = (posts: PostModelSchema[]): PostDetail[] => {
     meta: post.meta,
     tags: post.tags,
   }));
+};
+
+export const isAdmin = async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  const user = session?.user as UserProfile;
+
+  return user && user.role === 'admin';
 };

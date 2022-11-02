@@ -6,9 +6,15 @@ interface Props {
   src: string;
   selected?: boolean;
   onClick?(): void;
+  alt?: string;
 }
 
-const CustomImage: FC<Props> = ({ src, selected, onClick }): JSX.Element => {
+const CustomImage: FC<Props> = ({
+  src,
+  selected,
+  onClick,
+  alt = 'gallery',
+}): JSX.Element => {
   return (
     <div
       onClick={onClick}
@@ -18,7 +24,7 @@ const CustomImage: FC<Props> = ({ src, selected, onClick }): JSX.Element => {
         src={src}
         width={200}
         height={200}
-        alt="gallery"
+        alt={alt}
         className="bg-secondary-light hover:scale-110 transition-transform"
         objectFit="cover"
       />

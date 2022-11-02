@@ -36,7 +36,7 @@ const SEOForm: FC<Props> = ({
   };
 
   useEffect(() => {
-    const slug = slugify(title, { lower: true });
+    const slug = slugify(title, { lower: true, strict: true });
     const newValues = { ...values, slug };
     setValues(newValues);
     onChange(newValues);
@@ -46,7 +46,7 @@ const SEOForm: FC<Props> = ({
     if (initialValue)
       setValues({
         ...initialValue,
-        slug: slugify(initialValue.slug, { lower: true }),
+        slug: slugify(initialValue.slug, { lower: true, strict: true }),
       });
   }, [initialValue]);
 
