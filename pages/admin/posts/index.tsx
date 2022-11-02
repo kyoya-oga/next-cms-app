@@ -5,10 +5,12 @@ import type {
   NextPage,
 } from 'next';
 import { useState } from 'react';
+import ConfirmModal from '../../../components/common/ConfirmModal';
 import InfiniteScrollPosts from '../../../components/common/InfiniteScrollPosts';
 import PostCard from '../../../components/common/PostCard';
 import AdminLayout from '../../../components/layout/AdminLayout';
 import { formatPosts, readPostsFromDb } from '../../../lib/utils';
+import { filterPosts } from '../../../utils/helper';
 import { PostDetail } from '../../../utils/types';
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -18,13 +20,13 @@ const limit = 6;
 
 const Posts: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(posts.length >= limit);
 
   const fetchMorePosts = async () => {
     try {
       pageNo++;
       const { data } = await axios(
-        `/api/posts?limit=${limit}&pageNo=${pageNo}`
+        `/api/posts?limit=${limit}&skip=${postsToRender.length}`
       );
       if (data.posts.length < limit) {
         setPostsToRender([...postsToRender, ...data.posts]);
@@ -38,15 +40,20 @@ const Posts: NextPage<Props> = ({ posts }) => {
     }
   };
   return (
-    <AdminLayout title="Posts">
-      <InfiniteScrollPosts
-        hasMore={hasMorePosts}
-        next={fetchMorePosts}
-        dataLength={postsToRender.length}
-        posts={postsToRender}
-        showControls
-      />
-    </AdminLayout>
+    <>
+      <AdminLayout title="Posts">
+        <InfiniteScrollPosts
+          hasMore={hasMorePosts}
+          next={fetchMorePosts}
+          dataLength={postsToRender.length}
+          posts={postsToRender}
+          showControls
+          onPostRemoved={(post) =>
+            setPostsToRender(filterPosts(postsToRender, post))
+          }
+        />
+      </AdminLayout>
+    </>
   );
 };
 

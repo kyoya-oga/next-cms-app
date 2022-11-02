@@ -4,11 +4,13 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import InfiniteScrollPosts from '../components/common/InfiniteScrollPosts';
 import DefaultLayout from '../components/layout/DefaultLayout';
 import { formatPosts, readPostsFromDb } from '../lib/utils';
-import { PostDetail } from '../utils/types';
+import { filterPosts } from '../utils/helper';
+import { PostDetail, UserProfile } from '../utils/types';
 
 let pageNo = 0;
 const limit = 6;
@@ -17,15 +19,17 @@ type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const Home: NextPage<Props> = ({ posts }) => {
   const [postsToRender, setPostsToRender] = useState(posts);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(posts.length >= limit);
 
-  const isAdmin = false;
+  const { data } = useSession();
+  const profile = data?.user as UserProfile;
+  const isAdmin = profile && profile.role === 'admin';
 
   const fetchMorePosts = async () => {
     try {
       pageNo++;
       const { data } = await axios(
-        `/api/posts?limit=${limit}&pageNo=${pageNo}`
+        `/api/posts?limit=${limit}&skip=${postsToRender.length}`
       );
       if (data.posts.length < limit) {
         setPostsToRender([...postsToRender, ...data.posts]);
@@ -48,6 +52,7 @@ const Home: NextPage<Props> = ({ posts }) => {
           dataLength={postsToRender.length}
           posts={postsToRender}
           showControls={isAdmin}
+          onPostRemoved={(post) => setPostsToRender(filterPosts(posts, post))}
         />
       </div>
     </DefaultLayout>

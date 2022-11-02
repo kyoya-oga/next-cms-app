@@ -4,6 +4,7 @@ import { FC } from 'react';
 import useDarkMode from '../../../hooks/useDarkMode';
 import DropdownOptions, { DropDownOptions } from '../DropdownOptions';
 import ProfileHead from '../ProfileHead';
+import SearchBar from '../SearchBar';
 
 interface Props {}
 
@@ -29,7 +30,7 @@ const AdminSecondaryNav: FC<Props> = (props): JSX.Element => {
   ];
   return (
     <div className="flex items-center justify-between">
-      <input type="text" />
+      <SearchBar />
 
       <DropdownOptions
         head={<ProfileHead nameInitial="J" />}

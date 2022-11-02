@@ -16,8 +16,27 @@ const handler: NextApiHandler = (req, res) => {
   switch (method) {
     case 'PATCH':
       return updatePost(req, res);
+    case 'DELETE':
+      return removePost(req, res);
     default:
       return res.status(404).send(`Not found`);
+  }
+};
+
+const removePost: NextApiHandler = async (req, res) => {
+  try {
+    const postId = req.query.postId as string;
+    const post = await Post.findByIdAndDelete(postId);
+
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+
+    // Remove image from cloudinary
+    const publicId = post.thumbnail?.public_id;
+    if (publicId) await cloudinary.uploader.destroy(publicId);
+
+    res.json({ removed: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 

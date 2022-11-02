@@ -1,6 +1,8 @@
-import { FC, ReactNode } from 'react';
+import axios from 'axios';
+import { FC, ReactNode, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { PostDetail } from '../../utils/types';
+import ConfirmModal from './ConfirmModal';
 import PostCard from './PostCard';
 
 interface Props {
@@ -10,6 +12,7 @@ interface Props {
   next(): void;
   dataLength: number;
   loader?: ReactNode;
+  onPostRemoved(post: PostDetail): void;
 }
 
 const InfiniteScrollPosts: FC<Props> = ({
@@ -19,33 +22,73 @@ const InfiniteScrollPosts: FC<Props> = ({
   next,
   dataLength,
   loader,
+  onPostRemoved,
 }): JSX.Element => {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [postToRemove, setPostToRemove] = useState<PostDetail | null>(null);
+  const [removing, setRemoving] = useState(false);
+
+  const handleOnDeleteClick = (post: PostDetail) => {
+    setPostToRemove(post);
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowConfirmModal(false);
+  };
+
+  const handleOnDeleteConfirm = async () => {
+    if (!postToRemove) return handleDeleteCancel();
+
+    setShowConfirmModal(false);
+    setRemoving(true);
+
+    const { data } = await axios.delete(`/api/posts/${postToRemove.id}`);
+
+    if (data.removed) {
+      onPostRemoved(postToRemove);
+    }
+    setRemoving(false);
+  };
+
   const defaultLoader = (
     <p className="p-3 text-secondary-dark opacity-50 text-center font-semibold text-xl animate-pulse">
       Loading...
     </p>
   );
   return (
-    <InfiniteScroll
-      hasMore={hasMore}
-      next={next}
-      dataLength={dataLength}
-      loader={loader || defaultLoader}
-    >
-      <div className="max-w-4xl mx-auto p-3">
-        <ul className="grid grid-cols-3 gap-4">
-          {posts.map((post, index) => {
-            return (
-              <PostCard
-                post={post}
-                key={index + post.slug}
-                controls={showControls}
-              />
-            );
-          })}
-        </ul>
-      </div>
-    </InfiniteScroll>
+    <>
+      <InfiniteScroll
+        hasMore={hasMore}
+        next={next}
+        dataLength={dataLength}
+        loader={loader || defaultLoader}
+      >
+        <div className="max-w-4xl mx-auto p-3">
+          <ul className="grid grid-cols-3 gap-4">
+            {posts.map((post, index) => {
+              return (
+                <PostCard
+                  post={post}
+                  key={index + post.slug}
+                  controls={showControls}
+                  onDeleteClick={() => handleOnDeleteClick(post)}
+                  busy={post.id === postToRemove?.id && removing}
+                />
+              );
+            })}
+          </ul>
+        </div>
+      </InfiniteScroll>
+      <ConfirmModal
+        visible={showConfirmModal}
+        onClose={handleDeleteCancel}
+        onCancel={handleDeleteCancel}
+        onConfirm={handleOnDeleteConfirm}
+        title="Are you sure?"
+        subTitle="This action will remove this post permanently!"
+      />
+    </>
   );
 };
 

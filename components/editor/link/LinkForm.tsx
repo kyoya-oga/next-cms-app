@@ -54,7 +54,10 @@ const LinkForm: FC<Props> = ({
             setLink({ ...link, openInNewTab: target.checked })
           }
         />
-        <label htmlFor="open-in-new-tab" className="whitespace-nowrap ml-1">
+        <label
+          htmlFor="open-in-new-tab"
+          className="whitespace-nowrap ml-1 text-secondary-dark dark:text-secondary-light"
+        >
           open in new tab
         </label>
 
