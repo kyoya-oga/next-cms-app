@@ -1,6 +1,6 @@
 import { Model, model, models, ObjectId, Schema } from 'mongoose';
 
-export interface PostModelSchema {
+export interface IPost {
   _id: ObjectId;
   title: string;
   content: string;
@@ -15,7 +15,7 @@ export interface PostModelSchema {
   author: ObjectId;
 }
 
-const PostSchema = new Schema<PostModelSchema>(
+const PostSchema = new Schema<IPost>(
   {
     title: {
       type: String,
@@ -59,4 +59,4 @@ const PostSchema = new Schema<PostModelSchema>(
 // configure for Next.js
 const Post = models?.Post || model('Post', PostSchema);
 
-export default Post as Model<PostModelSchema>;
+export default Post as Model<IPost>;

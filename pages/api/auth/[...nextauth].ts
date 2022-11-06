@@ -4,11 +4,20 @@ import dbConnect from '../../../lib/dbConnect';
 import User from '../../../models/User';
 import { UserProfile } from '../../../utils/types';
 
+const { GITHUB_ID, GITHUB_SECRET, GITHUB_ID_PROD, GITHUB_SECRET_PROD } =
+  process.env;
+
+const GITHUB_CLIENT_ID =
+  process.env.NODE_ENV === 'production' ? GITHUB_ID_PROD : GITHUB_ID;
+
+const GITHUB_CLIENT_SECRET =
+  process.env.NODE_ENV === 'production' ? GITHUB_SECRET_PROD : GITHUB_SECRET;
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
+      clientId: GITHUB_CLIENT_ID as string,
+      clientSecret: GITHUB_CLIENT_SECRET as string,
       async profile(profile) {
         await dbConnect();
         const oldUser = await User.findOne({ email: profile.email });

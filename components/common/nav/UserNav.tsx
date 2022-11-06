@@ -1,4 +1,4 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -31,10 +31,6 @@ const UserNav: FC<Props> = (props): JSX.Element => {
   const router = useRouter();
   const profile = data?.user as UserProfile | undefined;
   const isAdmin = profile && profile.role === 'admin';
-
-  const handleLoginWithGithub = async () => {
-    const res = await signIn('github');
-  };
 
   const dropdownOptions: DropDownOptions = isAdmin
     ? [
@@ -71,7 +67,7 @@ const UserNav: FC<Props> = (props): JSX.Element => {
             head={<ProfileHead nameInitial="B" lightOnly />}
           />
         ) : (
-          <GithubAuthButton onClick={handleLoginWithGithub} lightOnly />
+          <GithubAuthButton lightOnly />
         )}
       </div>
     </div>

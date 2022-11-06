@@ -7,6 +7,7 @@ import { EditorContent, getMarkRange, Range, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import axios from 'axios';
 import { ChangeEventHandler, FC, useEffect, useState } from 'react';
+import useEditorConfig from '../../hooks/useEditorConfig';
 import ActionButton from '../common/ActionButton';
 import GalleryModal, { ImageSelectionResults } from './GalleryModal';
 import EditLink from './link/EditLink';
@@ -52,49 +53,7 @@ const Editor: FC<Props> = ({
     setImages(data.images);
   };
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Image.configure({
-        HTMLAttributes: {
-          class: 'mx-auto',
-        },
-      }),
-      Link.configure({
-        autolink: false,
-        linkOnPaste: false,
-        openOnClick: false,
-        HTMLAttributes: {
-          target: '',
-        },
-      }),
-      Placeholder.configure({ placeholder: 'Start writing...' }),
-      Youtube.configure({
-        width: 840,
-        height: 472.5,
-        HTMLAttributes: {
-          class: 'mx-auto rounded',
-        },
-      }),
-    ],
-    editorProps: {
-      handleClick(view, pos, _event) {
-        const { state } = view;
-        const selectionRange = getMarkRange(
-          state.doc.resolve(pos),
-          state.schema.marks.link
-        );
-        if (selectionRange) {
-          setSelectionRange(selectionRange);
-        }
-      },
-      attributes: {
-        class:
-          'prose prose-lg focus:outline-none dark:prose-invert max-w-full mx-auto h-full',
-      },
-    },
-  });
+  const { editor } = useEditorConfig();
 
   const handleImageSelection = (result: ImageSelectionResults) => {
     editor

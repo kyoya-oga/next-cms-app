@@ -1,7 +1,7 @@
 import formidable from 'formidable';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import Post, { PostModelSchema } from '../models/Post';
+import Post, { IPost } from '../models/Post';
 import { authOptions } from '../pages/api/auth/[...nextauth]';
 import { PostDetail, UserProfile } from '../utils/types';
 import dbConnect from './dbConnect';
@@ -46,7 +46,7 @@ export const readPostsFromDb = async (
   return posts;
 };
 
-export const formatPosts = (posts: PostModelSchema[]): PostDetail[] => {
+export const formatPosts = (posts: IPost[]): PostDetail[] => {
   return posts.map((post) => ({
     id: post._id.toString(),
     title: post.title,
@@ -58,9 +58,9 @@ export const formatPosts = (posts: PostModelSchema[]): PostDetail[] => {
   }));
 };
 
-export const isAdmin = async (req: NextApiRequest, res: NextApiResponse) => {
+export const isAuth = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await unstable_getServerSession(req, res, authOptions);
-  const user = session?.user as UserProfile;
+  const user = session?.user;
 
-  return user && user.role === 'admin';
+  if (user) return user as UserProfile;
 };

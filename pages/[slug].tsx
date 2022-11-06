@@ -7,17 +7,21 @@ import {
   NextPage,
 } from 'next';
 import Image from 'next/image';
+import { GithubAuthButton } from '../components/button';
+import CommentForm from '../components/common/CommentForm';
 import DefaultLayout from '../components/layout/DefaultLayout';
+import useAuth from '../hooks/useAuth';
 import dbConnect from '../lib/dbConnect';
 import Post from '../models/Post';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const SinglePost: NextPage<Props> = ({ post }) => {
+  const user = useAuth();
   const { title, content, tags, meta, slug, thumbnail, createdAt } = post;
   return (
     <DefaultLayout title={title} desc={meta}>
-      <div className="pt-10 pb-20">
+      <div className="pt-10">
         {thumbnail ? (
           <div className="relative aspect-video">
             (
@@ -42,6 +46,20 @@ const SinglePost: NextPage<Props> = ({ post }) => {
         <div className="prose max-w-full dark:prose-invert mx-auto">
           <div>{parse(content)}</div>
         </div>
+      </div>
+
+      {/* comment form */}
+      <div className="py-20">
+        {user ? (
+          <CommentForm title="Add comment" />
+        ) : (
+          <div className="flex flex-col items-end space-y-2">
+            <h3 className="text-secondary-dark text-xl font-semibold">
+              Log in to add comment
+            </h3>
+            <GithubAuthButton />
+          </div>
+        )}
       </div>
     </DefaultLayout>
   );
@@ -107,6 +125,7 @@ export const getStaticProps: GetStaticProps<
           createdAt: createdAt.toString(),
         },
       },
+      revalidate: 60,
     };
   } catch (error) {
     return { notFound: true };

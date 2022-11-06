@@ -1,27 +1,27 @@
-# Next.js + Tailwind CSS Example
+## Next.js Blog App
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+👉[Demo URL](https://next-cms-app.vercel.app/)
 
-## Deploy your own
+### Built With
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+- [Next.js](https://nextjs.org/)
+- [tailwindcss](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [NextAuth](https://next-auth.js.org/)
+- [tiptap](https://tiptap.dev/)
+- [MongoDB](https://www.mongodb.com/)
+- [Cloudinary](https://cloudinary.com/)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+### Functionality
 
-## How to use
+- Write blogs in a rich text editor
+- Styles with tailwindcss
+- Authentication(Github)
+- Upload images to Cloudinary
+- Light & Dark mode
+- Admin dashboard
+- Infinite scroll
+- Search (in progress)
+- Add comments (in progress)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Thanks to [Niraj Dhungana](https://www.udemy.com/course/full-stack-development-with-next-js-typescript/) 🙏
