@@ -4,14 +4,13 @@ import dbConnect from '../../../lib/dbConnect';
 import User from '../../../models/User';
 import { UserProfile } from '../../../utils/types';
 
-const { GITHUB_ID, GITHUB_SECRET, GITHUB_ID_PROD, GITHUB_SECRET_PROD } =
+const { GITHUB_ID, GITHUB_SECRET, GITHUB_ID_PROD, GITHUB_SECRET_PROD, MODE } =
   process.env;
 
-const GITHUB_CLIENT_ID =
-  process.env.NODE_ENV === 'production' ? GITHUB_ID_PROD : GITHUB_ID;
+const GITHUB_CLIENT_ID = MODE === 'production' ? GITHUB_ID_PROD : GITHUB_ID;
 
 const GITHUB_CLIENT_SECRET =
-  process.env.NODE_ENV === 'production' ? GITHUB_SECRET_PROD : GITHUB_SECRET;
+  MODE === 'production' ? GITHUB_SECRET_PROD : GITHUB_SECRET;
 
 export const authOptions: NextAuthOptions = {
   providers: [
