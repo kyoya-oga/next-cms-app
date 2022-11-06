@@ -4,7 +4,7 @@ import cloudinary from '../../../lib/cloudinary';
 import dbConnect from '../../../lib/dbConnect';
 import {
   formatPosts,
-  isAdmin,
+  isAuth,
   readFile,
   readPostsFromDb,
 } from '../../../lib/utils';
@@ -28,7 +28,7 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 const createNewPost: NextApiHandler = async (req, res) => {
-  const admin = await isAdmin(req, res);
+  const admin = await isAuth(req, res);
   if (!admin) return res.status(401).json({ error: 'Unauthorized' });
 
   const { files, body } = await readFile<IncomingPost>(req);

@@ -4,7 +4,6 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import InfiniteScrollPosts from '../components/common/InfiniteScrollPosts';
 import DefaultLayout from '../components/layout/DefaultLayout';

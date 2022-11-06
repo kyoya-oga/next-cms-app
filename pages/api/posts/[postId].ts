@@ -1,7 +1,7 @@
 import formidable from 'formidable';
 import { NextApiHandler } from 'next';
 import cloudinary from '../../../lib/cloudinary';
-import { isAdmin, readFile } from '../../../lib/utils';
+import { isAuth, readFile } from '../../../lib/utils';
 import { postValidationSchema, validateSchema } from '../../../lib/validator';
 import Post from '../../../models/Post';
 import { IncomingPost } from '../../../utils/types';
@@ -25,7 +25,7 @@ const handler: NextApiHandler = (req, res) => {
 
 const removePost: NextApiHandler = async (req, res) => {
   try {
-    const admin = await isAdmin(req, res);
+    const admin = await isAuth(req, res);
     if (!admin) return res.status(401).json({ error: 'Unauthorized' });
 
     const postId = req.query.postId as string;
@@ -44,7 +44,7 @@ const removePost: NextApiHandler = async (req, res) => {
 };
 
 const updatePost: NextApiHandler = async (req, res) => {
-  const admin = await isAdmin(req, res);
+  const admin = await isAuth(req, res);
   if (!admin) return res.status(401).json({ error: 'Unauthorized' });
 
   const postId = req.query.postId as string;
