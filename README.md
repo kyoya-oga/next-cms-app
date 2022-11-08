@@ -1,5 +1,9 @@
 ## Next.js Blog App
 
+![next-cms-top](https://user-images.githubusercontent.com/64949271/200498029-3658e7ef-204e-4d88-8611-b4c9f6093b06.jpeg)
+
+![next-cms-editor](https://user-images.githubusercontent.com/64949271/200498049-620ab781-da67-48ec-8040-2f7cb5947575.jpeg)
+
 👉[Demo URL](https://next-cms-app.vercel.app/)
 
 ### Built With
