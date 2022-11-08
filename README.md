@@ -8,7 +8,7 @@
 
 ![next-cms-editor](https://user-images.githubusercontent.com/64949271/200498049-620ab781-da67-48ec-8040-2f7cb5947575.jpeg)
 
-👉[Demo URL](https://next-cms-app.vercel.app/)
+👉 Here is [Demo URL](https://next-cms-app.vercel.app/)
 
 ### Built With
 
