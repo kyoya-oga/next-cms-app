@@ -17,7 +17,7 @@ const CommentForm: FC<Props> = ({ title }): JSX.Element => {
         </h1>
       ) : null}
       <EditorContent
-        className="min-h-[200px] p-2 border-2 border-secondary-dark rounded"
+        className="focus:outline-none min-h-[150px] p-2 border-2 border-secondary-dark rounded"
         editor={editor}
       />
       <div className="flex justify-end py-3">
